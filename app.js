@@ -1274,9 +1274,9 @@ function summariseGroup(rows, key, fallback = '未分類') {
 function questionKindFromCode(code = '') {
   const match = String(code).match(/-([TCKX])-?\d*$/i) || String(code).match(/-([TCKX])-/i);
   const kind = match ? match[1].toUpperCase() : '';
-  if (kind === 'T') return '文辭';
+  if (kind === 'T') return '語譯';
   if (kind === 'C') return '內容';
-  if (kind === 'K') return '結構';
+  if (kind === 'K') return '文辭/結構';
   if (kind === 'X') return '內容';
   return '';
 }
@@ -1284,15 +1284,15 @@ function questionKindFromCode(code = '') {
 function normaliseDseQuestionKind(value, questionCode = '') {
   const raw = String(value || '').trim().toLowerCase();
   if (['內容', 'content', 'comprehension'].includes(raw)) return '內容';
-  if (['文辭', '字詞', '翻譯', 'translation', 'language', 'wording', 'vocab', 'vocabulary'].includes(raw)) return '文辭';
-  if (['結構', '手法', 'technique', 'structure', 'writing'].includes(raw)) return '結構';
+  if (['語譯', '翻譯', 'translation'].includes(raw)) return '語譯';
+  if (['文辭/結構', '文辭', '結構', '手法', 'technique', 'structure', 'writing', 'language', 'wording', 'vocab', 'vocabulary', '字詞'].includes(raw)) return '文辭/結構';
   return questionKindFromCode(questionCode) || '內容';
 }
 
 function dseKindClass(name) {
   if (name === '內容') return 'easy';
-  if (name === '文辭') return 'normal';
-  if (name === '結構') return 'master';
+  if (name === '語譯') return 'normal';
+  if (name === '文辭/結構') return 'master';
   return 'hell';
 }
 
