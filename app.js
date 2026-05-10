@@ -982,6 +982,7 @@ function nextQuestion() {
   if (tags) {
     tags.innerHTML = '';
     if (q.dse_year) tags.insertAdjacentHTML('beforeend', `<span class="pill pill-gold">${q.dse_year} DSE</span>`);
+    tags.insertAdjacentHTML('beforeend', `<span class="pill pill-sage">${escapeHtml(normaliseDseQuestionKind(q.skill, q.id))}</span>`);
   }
   if ($('qText')) $('qText').textContent = q.question;
   const opts = $('qOptions');
