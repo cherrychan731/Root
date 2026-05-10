@@ -315,8 +315,15 @@
   .rank-3{ background:#b88a5c; color:#fff; }
   .rank-other{ background:transparent; color:var(--muted); }
 
+  .leader-head{
+    display:grid; grid-template-columns:48px minmax(0,1fr) 76px 76px 58px;
+    gap:14px; align-items:center;
+    padding:0 16px 8px;
+    color:var(--muted); font-size:10px; letter-spacing:.18em;
+  }
+  .leader-head span:nth-child(n+3){ text-align:right; }
   .leader-row{
-    display:grid; grid-template-columns:48px minmax(0,1fr) auto auto;
+    display:grid; grid-template-columns:48px minmax(0,1fr) 76px 76px 58px;
     gap:14px; align-items:center;
     padding:14px 16px;
     border:1px solid var(--cream-dark);
@@ -332,6 +339,12 @@
     color:var(--muted);
     font-size:11px; letter-spacing:.04em; font-weight:500;
   }
+  .leader-metric{ text-align:right; min-width:0; }
+  .metric-label{ display:none; }
+  .metric-value,
+  .leader-score{ display:block; }
+  .metric-accuracy{ font-family:'Noto Serif TC',serif; font-size:17px; font-weight:600; color:var(--sage-dark); }
+  .leader-mode{ justify-self:end; }
 
   /* page chrome */
   .page{ max-width:440px; margin:0 auto; padding:18px 16px 60px; }
@@ -536,8 +549,16 @@
     .mini-stat .cap{ font-size:9px; letter-spacing:.08em; }
     .activity-row-loose{ align-items:flex-start; gap:10px; flex-direction:column; }
     .activity-row-loose > .flex:last-child{ width:100%; justify-content:space-between; }
-    .leader-row{ grid-template-columns:38px minmax(0,1fr) auto; gap:10px; padding:12px; }
-    .leader-row .pill{ grid-column:2 / -1; justify-self:start; margin-top:-4px; }
+    .leader-head{ display:none; }
+    .leader-row{ grid-template-columns:38px minmax(0,1fr); gap:10px 12px; padding:12px; align-items:start; }
+    .leader-person{ min-width:0; }
+    .leader-metric{ text-align:left; }
+    .leader-metric:nth-of-type(1){ grid-column:1 / 2; padding-left:0; }
+    .leader-metric:nth-of-type(2){ grid-column:2 / 3; }
+    .metric-label{ display:block; margin-bottom:2px; color:var(--muted); font-size:9px; letter-spacing:.16em; }
+    .metric-accuracy,
+    .leader-score{ font-size:16px; }
+    .leader-mode{ grid-column:2 / 3; justify-self:start; margin-top:-2px; }
     .leader-score{ font-size:16px; }
     .leader-sub{ white-space:normal; line-height:1.45; }
     #lbTabs{ gap:22px; padding-right:34px; }
@@ -565,7 +586,8 @@
     .hero-dark{ padding:30px 28px 26px; }
     .action-hero{ height:112px; }
     .grid-card-sm{ min-height:90px; }
-    .leader-row{ grid-template-columns:48px minmax(0,1fr) 88px 74px; }
+    .leader-head,
+    .leader-row{ grid-template-columns:48px minmax(0,1fr) 76px 76px 58px; }
     #screen-game .page{ max-width:560px; }
     #screen-history .page-wide,
     #screen-leaderboard .page-wide,
