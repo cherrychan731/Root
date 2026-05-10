@@ -325,11 +325,8 @@
   .leader-name-line .truncate{ min-width:0; }
   .leader-year{
     flex:0 0 auto;
-    display:inline-flex; align-items:center; justify-content:center;
-    min-width:48px; height:22px; padding:0 8px;
-    border-radius:20px; background:var(--cream-card); color:var(--muted);
-    border:1px solid var(--cream-dark);
-    font-size:10px; letter-spacing:.08em; font-weight:600;
+    color:var(--muted);
+    font-size:11px; letter-spacing:.04em; font-weight:500;
   }
 
   /* page chrome */
