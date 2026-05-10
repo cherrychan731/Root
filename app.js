@@ -1229,6 +1229,16 @@ async function renderLeaderboard() {
     return `
       <div class="leader-row${me}">
         <span class="rank-medal ${rankClass}">${index + 1}</span>
+        <div class="leader-mobile-metrics">
+          <div class="leader-metric">
+            <span class="metric-label">準繩度</span>
+            <span class="metric-value metric-accuracy">${pct(row.accuracy)}</span>
+          </div>
+          <div class="leader-metric">
+            <span class="metric-label">分數</span>
+            <span class="leader-score">${Number(row.score || 0).toLocaleString()}</span>
+          </div>
+        </div>
         <div class="leader-person min-w-0">
           <div class="leader-name-line">
             <span class="leader-year">${escapeHtml(formatDseYear(row.dse_year))}</span>
