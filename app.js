@@ -142,6 +142,12 @@ function modeLabel(mode) {
   return ({ easy: '簡易', normal: '普通', master: '大師', hell: '地獄' })[mode] || '普通';
 }
 
+function formatDseYear(year) {
+  const value = String(year || '').trim();
+  if (!value) return 'DSE —';
+  return /dse/i.test(value) ? value.toUpperCase().replace(/\s+/g, ' ') : `${value} DSE`;
+}
+
 function escapeHtml(value) {
   return String(value ?? '').replace(/[&<>"']/g, (char) => ({
     '&': '&amp;',
@@ -1216,7 +1222,10 @@ async function renderLeaderboard() {
       <div class="leader-row${me}">
         <span class="rank-medal ${rankClass}">${index + 1}</span>
         <div class="min-w-0">
-          <div class="serif truncate" style="font-size:15px;font-weight:600;">${escapeHtml(row.nickname || '同學')}</div>
+          <div class="leader-name-line">
+            <span class="leader-year">${escapeHtml(formatDseYear(row.dse_year))}</span>
+            <span class="serif truncate" style="font-size:15px;font-weight:600;">${escapeHtml(row.nickname || '同學')}</span>
+          </div>
           <div class="leader-sub">${escapeHtml(row.text_title || '全部篇章')} · ${modeLabel(row.difficulty)} · ${fmtDate(row.created_at)}</div>
         </div>
         <div class="leader-score">${Number(row.score || 0).toLocaleString()}</div>

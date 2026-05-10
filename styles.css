@@ -319,6 +319,18 @@
     border-radius:6px; background:var(--warm-white);
   }
   .leader-row.me{ background:#eef3ef; border-color:var(--sage-light); }
+  .leader-name-line{
+    display:flex; align-items:center; gap:8px; min-width:0;
+  }
+  .leader-name-line .truncate{ min-width:0; }
+  .leader-year{
+    flex:0 0 auto;
+    display:inline-flex; align-items:center; justify-content:center;
+    min-width:48px; height:22px; padding:0 8px;
+    border-radius:20px; background:var(--cream-card); color:var(--muted);
+    border:1px solid var(--cream-dark);
+    font-size:10px; letter-spacing:.08em; font-weight:600;
+  }
 
   /* page chrome */
   .page{ max-width:440px; margin:0 auto; padding:18px 16px 60px; }
