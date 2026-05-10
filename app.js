@@ -310,12 +310,13 @@ async function initSession() {
   prefetchPracticeData();
   const isRecoveryUrl = window.location.hash.includes('type=recovery') || window.location.search.includes('type=recovery');
   try {
-    const { data, error } = await withTimeout(supabaseClient.auth.getUser(), 8000, 'session load');
+    const { data, error } = await withTimeout(supabaseClient.auth.getSession(), 8000, 'session load');
     if (error) throw error;
-    if (data?.user) {
-      currentUser = data.user;
-      state.user = userStateFromAuth(data.user);
-      safeSetSignedInUser(data.user).then((profileReady) => {
+    const sessionUser = data?.session?.user || null;
+    if (sessionUser) {
+      currentUser = sessionUser;
+      state.user = userStateFromAuth(sessionUser);
+      safeSetSignedInUser(sessionUser).then((profileReady) => {
         if (!profileReady) toast('帳號資料稍後再載入');
         if (profileReady && $('screen-home')?.classList.contains('active')) enterHome();
       });
