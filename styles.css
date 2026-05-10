@@ -112,12 +112,16 @@
   .analysis-section:last-child{ border-bottom:none; }
   .analysis-title{ padding:0 0 8px; }
   .insight-panel{ padding:14px 0 16px; border-bottom:1px solid var(--cream-dark); }
-  .insight-grid{ display:grid; grid-template-columns:1.1fr .9fr; gap:10px; }
-  .insight-card{ background:var(--cream-card); border:1px solid var(--cream-dark); border-radius:6px; padding:13px 14px; min-width:0; }
-  .insight-card .k{ font-size:10px; letter-spacing:.18em; color:var(--muted); text-transform:uppercase; }
-  .insight-card .v{ margin-top:5px; font-size:14px; line-height:1.55; color:var(--charcoal); }
-  .insight-card .v strong{ font-family:'Noto Serif TC',serif; font-size:18px; font-weight:600; }
-  .insight-card.main{ background:var(--warm-white); }
+  .student-summary{ background:var(--warm-white); border:1px solid var(--cream-dark); border-radius:6px; padding:13px 14px; }
+  .summary-main{ font-family:'Noto Serif TC',serif; font-size:16px; line-height:1.65; color:var(--charcoal); }
+  .summary-meta{ margin-top:4px; font-size:11.5px; color:var(--muted); line-height:1.5; }
+  .focus-list{ margin-top:10px; border:1px solid var(--cream-dark); border-radius:6px; overflow:hidden; background:var(--warm-white); }
+  .focus-row{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding:11px 13px; border-bottom:1px solid var(--cream-dark); }
+  .focus-row:last-child{ border-bottom:none; }
+  .focus-name{ font-size:13px; color:var(--charcoal); line-height:1.4; }
+  .focus-sub{ margin-top:2px; font-size:10.5px; color:var(--muted); }
+  .focus-acc{ font-family:'Noto Serif TC',serif; font-size:18px; font-weight:600; color:var(--sage-dark); white-space:nowrap; }
+  .focus-empty{ padding:14px; color:var(--muted); font-size:12px; line-height:1.6; }
   .advice-line{ margin-top:10px; padding:11px 12px; border-left:3px solid var(--sage); background:var(--warm-white); color:var(--charcoal); font-size:12.5px; line-height:1.7; }
   .bar-row{ display:grid; grid-template-columns:44px 1fr 54px; gap:10px; align-items:center; padding:10px 0; border-bottom:1px solid var(--cream-dark); }
   .bar-row.analysis-row{ grid-template-columns:minmax(92px, 1.1fr) 1.5fr 58px; gap:12px; padding:9px 0; }

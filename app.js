@@ -1317,7 +1317,20 @@ function describeAccuracy(avgAcc) {
   return '仍在打底，建議先用短題量建立準確率。';
 }
 
-function renderHistoryInsights(rows, answerRows, dseKindGroups, textGroups, questionDifficultyGroups) {
+function renderStudentFocus(groups) {
+  const items = groups.filter((group) => group && group.total >= 2).slice(0, 3);
+  if (!items.length) return '<div class="focus-empty">完成更多題目後，這裡會列出最需要加強的地方。</div>';
+  return items.map((group) => `
+    <div class="focus-row">
+      <div>
+        <div class="focus-name">${escapeHtml(group.label || group.name)}</div>
+        <div class="focus-sub">${group.total} 題紀錄</div>
+      </div>
+      <div class="focus-acc">${group.accuracy.toFixed(1)}%</div>
+    </div>`).join('');
+}
+
+function renderHistoryInsights(rows, answerRows, dseKindGroups, textKindGroups, questionDifficultyGroups) {
   const plays = rows.length;
   const avgAcc = averageAccuracy(rows);
   const totalQuestions = rows.reduce((sum, row) => sum + Number(row.total_questions || 0), 0);
@@ -1325,43 +1338,27 @@ function renderHistoryInsights(rows, answerRows, dseKindGroups, textGroups, ques
   const retryRate = totalQuestions ? retryTotal / totalQuestions * 100 : 0;
   const trend = describeTrend(rows);
   const weakKind = dseKindGroups.filter((group) => group.total >= 3).sort((a, b) => a.accuracy - b.accuracy || b.total - a.total)[0];
-  const weakText = textGroups.filter((group) => group.total >= 3).sort((a, b) => a.accuracy - b.accuracy || b.total - a.total)[0];
   const hardLevel = questionDifficultyGroups.filter((group) => group.total >= 3).sort((a, b) => a.accuracy - b.accuracy || b.total - a.total)[0];
-  const wrongCounts = new Map();
-  answerRows.filter((row) => !row.is_correct).forEach((row) => {
-    const key = `${row.dseKind || '內容'} · ${row.text_title || '全部篇章'}`;
-    wrongCounts.set(key, (wrongCounts.get(key) || 0) + 1);
-  });
-  const commonWrong = [...wrongCounts.entries()].sort((a, b) => b[1] - a[1])[0];
-  const focus = weakKind || weakText;
-  const focusText = focus ? `${focus.name}（${focus.accuracy.toFixed(1)}%，${focus.total} 題）` : '暫時未有明顯弱項';
-  const difficultyText = hardLevel ? `${hardLevel.name} 題（${hardLevel.accuracy.toFixed(1)}%）` : '完成更多題目後顯示';
-  const advice = focus
-    ? `下一次建議選弱項篇章，集中做「${escapeHtml(focus.name)}」相關題；先求首次答對率穩定，再增加抽題數。`
-    : `下一次可以選最近少練的篇章，按內容、文辭、結構各做一輪，保持 DSE 題感。`;
+  const focusGroups = [
+    ...textKindGroups.map((group) => ({ ...group, label: `${shortTextTitle(group.textTitle || group.name)}｜${group.kind || '內容'}` })),
+    ...dseKindGroups.map((group) => ({ ...group, label: `${group.name}題` })),
+    ...questionDifficultyGroups.map((group) => ({ ...group, label: `${group.name}題` })),
+  ].sort((a, b) => a.accuracy - b.accuracy || b.total - a.total);
+  const mainFocus = focusGroups.find((group) => group.total >= 2);
+  const advice = mainFocus
+    ? `下一次先做「${escapeHtml(mainFocus.label)}」。目標是先穩定答對，不急著增加題數。`
+    : `下一次先完成一輪短題量練習，讓系統累積足夠紀錄。`;
+  const status = `${trend.label}。${plays >= 3 ? describeAccuracy(avgAcc) : trend.detail}`;
 
   return `
     <div class="insight-panel">
-      <div class="label analysis-title">學習診斷</div>
-      <div class="insight-grid">
-        <div class="insight-card main">
-          <div class="k">近況</div>
-          <div class="v"><strong>${trend.label}</strong><br>${escapeHtml(trend.detail)}${plays >= 3 ? ` ${describeAccuracy(avgAcc)}` : ''}</div>
-        </div>
-        <div class="insight-card">
-          <div class="k">重試壓力</div>
-          <div class="v"><strong>${retryRate.toFixed(1)}%</strong><br>${retryTotal} 次重試 / ${totalQuestions || 0} 題</div>
-        </div>
-        <div class="insight-card">
-          <div class="k">DSE 題型弱項</div>
-          <div class="v">${escapeHtml(focusText)}</div>
-        </div>
-        <div class="insight-card">
-          <div class="k">題目難度弱項</div>
-          <div class="v">${escapeHtml(difficultyText)}</div>
-        </div>
+      <div class="label analysis-title">表現分析</div>
+      <div class="student-summary">
+        <div class="summary-main">${escapeHtml(status)}</div>
+        <div class="summary-meta">重試 ${retryTotal} 次 / ${totalQuestions || 0} 題 · 重試率 ${retryRate.toFixed(1)}%</div>
       </div>
-      <div class="advice-line">${advice}${commonWrong ? ` 常錯範疇集中在「${escapeHtml(commonWrong[0])}」。` : ''}</div>
+      <div class="focus-list">${renderStudentFocus(focusGroups)}</div>
+      <div class="advice-line">${advice}${weakKind ? ` 目前較弱的是「${escapeHtml(weakKind.name)}題」。` : ''}${hardLevel ? ` 題目難度上要留意「${escapeHtml(hardLevel.name)}題」。` : ''}</div>
     </div>`;
 }
 
@@ -1377,7 +1374,7 @@ function renderAnalysisBars(title, groups, classPrefix = '') {
 
 function renderTextKindBars(groups) {
   if (!groups.length) return '';
-  return `<div class="analysis-section"><div class="label analysis-title">篇章 × 題型弱項</div>` + groups.slice(0, 6).map((group) => `
+  return `<div class="analysis-section"><div class="label analysis-title">重點弱項</div>` + groups.filter((group) => group.total >= 2).slice(0, 3).map((group) => `
     <div class="bar-row analysis-row compact-analysis-row">
       <span class="analysis-label compact-analysis-label">
         <span class="truncate">${escapeHtml(shortTextTitle(group.textTitle || group.name))}</span>
@@ -1486,13 +1483,9 @@ async function renderHistory() {
     });
     const questionDifficultyGroups = summariseGroup(answerRows, 'questionDifficulty', '未標示');
     breakdown.innerHTML = [
-      renderHistoryInsights(rows, answerRows, dseKindGroups, textGroups, questionDifficultyGroups),
-      renderAnalysisBars('DSE 題型弱項', dseKindGroups, dseKindClass),
+      renderHistoryInsights(rows, answerRows, dseKindGroups, textKindGroups, questionDifficultyGroups),
       renderTextKindBars(textKindGroups),
-      renderAnalysisBars('題目難度弱項', questionDifficultyGroups),
-      renderAnalysisBars('篇章弱項', textGroups),
-      renderAnalysisBars('抽題模式表現', modeGroups.map((group) => ({ ...group, className: group.rawName })), (name) => name),
-      `<div class="text-xs pt-3 pb-2" style="color:var(--muted);">最近 ${plays} 場共重試 ${retryTotal} 次。下方列表保留每場紀錄，方便回看哪一篇、哪一種題量最不穩。</div>`,
+      `<div class="text-xs pt-3 pb-2" style="color:var(--muted);">只顯示最需要加強的部分；下方保留每場紀錄，方便回看。</div>`,
     ].join('');
   }
 
