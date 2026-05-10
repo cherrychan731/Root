@@ -554,22 +554,23 @@
     #lbList{ --leader-gap:10px 12px; }
     .leader-head{ display:none; }
     .leader-row{
-      grid-template-columns:52px 1fr 1fr;
+      grid-template-columns:58px minmax(0,1fr) 78px;
       grid-template-areas:
         "rank acc score"
         "info info info";
-      gap:10px 12px;
-      padding:13px 14px;
+      gap:12px 16px;
+      padding:14px 16px;
       align-items:center;
     }
     .rank-medal{ grid-area:rank; align-self:center; justify-self:center; }
     .leader-person{ grid-area:info; min-width:0; padding-top:2px; }
     .leader-row > .leader-metric{ display:none; }
     .leader-mobile-metrics{ display:contents; }
-    .leader-mobile-metrics .leader-metric{ text-align:left; min-width:0; }
+    .leader-mobile-metrics .leader-metric{ min-width:0; }
     .leader-mobile-metrics .leader-metric:first-child{ grid-area:acc; }
-    .leader-mobile-metrics .leader-metric:last-child{ grid-area:score; }
-    .leader-mobile-metrics .leader-score{ text-align:left; }
+    .leader-mobile-metrics .leader-metric:last-child{ grid-area:score; text-align:right; }
+    .leader-mobile-metrics .leader-score{ text-align:right; }
+    .leader-mobile-metrics .leader-metric:first-child{ text-align:left; }
     .metric-label{ display:block; margin-bottom:2px; color:var(--muted); font-size:9px; letter-spacing:.16em; }
     .metric-accuracy,
     .leader-score{ font-size:16px; }
