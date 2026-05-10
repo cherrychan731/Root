@@ -551,21 +551,24 @@
     .mini-stat .cap{ font-size:9px; letter-spacing:.08em; }
     .activity-row-loose{ align-items:flex-start; gap:10px; flex-direction:column; }
     .activity-row-loose > .flex:last-child{ width:100%; justify-content:space-between; }
-    #lbList{ --leader-cols:38px minmax(0,1fr); --leader-gap:10px 12px; }
+    #lbList{ --leader-gap:10px 12px; }
     .leader-head{ display:none; }
-    .leader-row{ grid-template-columns:var(--leader-cols); gap:var(--leader-gap); padding:12px; align-items:start; }
-    .leader-person{ grid-column:2 / 3; min-width:0; }
-    .leader-row > .leader-metric{ display:none; }
-    .leader-mobile-metrics{
-      grid-column:2 / 3;
-      grid-row:1;
-      display:grid;
-      grid-template-columns:1fr 1fr;
+    .leader-row{
+      grid-template-columns:52px 1fr 1fr;
+      grid-template-areas:
+        "rank acc score"
+        "info info info";
       gap:12px;
-      width:100%;
-      margin-bottom:2px;
+      padding:14px;
+      align-items:center;
     }
-    .leader-mobile-metrics .leader-metric{ text-align:left; }
+    .rank-medal{ grid-area:rank; align-self:center; justify-self:center; }
+    .leader-person{ grid-area:info; min-width:0; padding-top:2px; }
+    .leader-row > .leader-metric{ display:none; }
+    .leader-mobile-metrics{ display:contents; }
+    .leader-mobile-metrics .leader-metric{ text-align:left; min-width:0; }
+    .leader-mobile-metrics .leader-metric:first-child{ grid-area:acc; }
+    .leader-mobile-metrics .leader-metric:last-child{ grid-area:score; }
     .metric-label{ display:block; margin-bottom:2px; color:var(--muted); font-size:9px; letter-spacing:.16em; }
     .metric-accuracy,
     .leader-score{ font-size:16px; }
