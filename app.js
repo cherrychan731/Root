@@ -1222,7 +1222,6 @@ async function renderLeaderboard() {
       <span>同學</span>
       <span>準繩度</span>
       <span>分數</span>
-      <span>模式</span>
     </div>` + rows.map((row, index) => {
     const rankClass = index === 0 ? 'rank-1' : index === 1 ? 'rank-2' : index === 2 ? 'rank-3' : 'rank-other';
     const me = state.user && (row.nickname || '') === (state.user.nickname || state.user.username || '') ? ' me' : '';
@@ -1244,7 +1243,7 @@ async function renderLeaderboard() {
             <span class="leader-year">${escapeHtml(formatDseYear(row.dse_year))}</span>
             <span class="serif truncate" style="font-size:15px;font-weight:600;">${escapeHtml(row.nickname || '同學')}</span>
           </div>
-          <div class="leader-sub">${escapeHtml(row.text_title || '全部篇章')} · ${fmtDate(row.created_at)}</div>
+          <div class="leader-sub">${escapeHtml(row.text_title || '全部篇章')} · ${fmtDate(row.created_at)} · ${modeLabel(row.difficulty)}</div>
         </div>
         <div class="leader-metric">
           <span class="metric-label">準繩度</span>
@@ -1254,7 +1253,6 @@ async function renderLeaderboard() {
           <span class="metric-label">分數</span>
           <span class="leader-score">${Number(row.score || 0).toLocaleString()}</span>
         </div>
-        <span class="pill pill-cream leader-mode">${modeLabel(row.difficulty)}</span>
       </div>`;
   }).join('');
 }
